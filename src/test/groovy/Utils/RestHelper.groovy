@@ -16,7 +16,7 @@ public class RestHelper {
 
    //Global Setup Variables
     public static String path; //Rest request path
-    public ConfigHelper cfg;
+//    public ConfigHelper cfg;
 
     /*
     ***Sets Base URI***
@@ -24,11 +24,11 @@ public class RestHelper {
     */
     @BeforeSuite
     public  void setBaseURI (){
-        cfg=new ConfigHelper("build.properties");
-        RestAssured.baseURI = cfg.getProperty("baseUrl");
-        RestAssured.basePath = cfg.getProperty("basePath");
-
-
+//        cfg=new ConfigHelper("build.properties");
+//        RestAssured.baseURI = cfg.getProperty("baseUrl");
+//        RestAssured.basePath = cfg.getProperty("basePath");
+        RestAssured.baseURI = System.getProperty("baseUrl");
+        RestAssured.basePath = System.getProperty("basePath");
     }
 
     /*
@@ -50,27 +50,27 @@ public class RestHelper {
         return new JsonPath(json);
     }
 
-    private String createResource(String path, Object bodyPayload) {
-        return given()
-                .spec(spec)
-                .body(bodyPayload)
-                .when()
-                .post(path)
-                .then()
-                .statusCode(201)
-                .extract().header("location");
-    }
+//    private String createResource(String path, Object bodyPayload) {
+//        return given()
+//                .spec(spec)
+//                .body(bodyPayload)
+//                .when()
+//                .post(path)
+//                .then()
+//                .statusCode(201)
+//                .extract().header("location");
+//    }
 
 
-    private <T> T getResourceWithClass(String locationHeader, Class<T> responseClass) {
-        return given()
-                .spec(spec)
-                .when()
-                .get(locationHeader)
-                .then()
-                .statusCode(200)
-                .extract().as(responseClass);
-    }
+//    private <T> T getResourceWithClass(String locationHeader, Class<T> responseClass) {
+//        return given()
+//                .spec(spec)
+//                .when()
+//                .get(locationHeader)
+//                .then()
+//                .statusCode(200)
+//                .extract().as(responseClass);
+//    }
 
     /*
     ***Reset Base URI (after test)***
