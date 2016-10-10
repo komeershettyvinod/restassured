@@ -6,34 +6,14 @@ import Utils.RestHelper
  * Created by vinodk on 04-09-2016.
  */
 
-import com.jayway.restassured.authentication.FormAuthConfig
 import com.jayway.restassured.builder.RequestSpecBuilder
-import com.jayway.restassured.builder.ResponseSpecBuilder
-import com.jayway.restassured.config.RestAssuredConfig
-import com.jayway.restassured.filter.Filter
 import com.jayway.restassured.http.ContentType
-import com.jayway.restassured.internal.mapper.ObjectMapperType
-import com.jayway.restassured.mapper.ObjectMapper
 import com.jayway.restassured.path.json.JsonPath
-import com.jayway.restassured.response.Cookie
-import com.jayway.restassured.response.Cookies
-import com.jayway.restassured.response.Header
-import com.jayway.restassured.response.Headers
-import com.jayway.restassured.specification.AuthenticationSpecification
-import com.jayway.restassured.specification.MultiPartSpecification
-import com.jayway.restassured.specification.ProxySpecification
-import com.jayway.restassured.specification.RedirectSpecification
-import com.jayway.restassured.specification.RequestLogSpecification
 import com.jayway.restassured.specification.RequestSpecification
-import com.jayway.restassured.specification.ResponseSpecification
-import groovy.json.JsonSlurper
+import org.testng.Reporter
 import org.testng.annotations.BeforeClass
-import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import com.jayway.restassured.response.Response
-
-import java.security.KeyStore;
-
 import static com.jayway.restassured.RestAssured.given;
 import com.jayway.restassured.RestAssured.*
 import com.jayway.restassured.matcher.RestAssuredMatchers.*
@@ -55,23 +35,33 @@ class Get extends RestHelper{
     public setup() {
         response=given().header("Content-Type", "application/x-www-form-urlencoded").formParam("j_username", "Vinod.komeershetty.consultant@nielsen.com").formParam("j_password", "Affinnova").request().post();
         finalCookie=response.getHeader("Set-Cookie").split(";")[0]
+        Reporter.log("Base Path----->"+RestAssured.basePath)
         setBasePath("")
         builder=new RequestSpecBuilder()
         builder.addHeader("Cookie",finalCookie)
         requestSpec= builder.build()
+        Reporter.setEscapeHtml(true)
+        Reporter.log("class level")
+        Reporter.log("Base Path"+RestAssured.basePath)
+        Reporter.log("Base URL-->"+RestAssured.baseURI)
     }
 
     @Test
     public void testApp(){
+
+        Reporter.log("At Test")
         setBasePath("/api/concepts?projectId=56403")
-        Response res= given().spec(requestSpec).get(RestAssured.basePath)
+        Response res= given().spec(requestSpec).when().get(RestAssured.basePath)
                 .then().contentType(ContentType.JSON).extract().response()
         JsonPath jp=getJsonPath(res)
-        println jp.concepts.conceptImages[0]
+//        Assert.assertTrue(jp.concepts.conceptImages[0],"apshot")
     }
 
     @Test
     public void get2() {
+
+
+
         setBasePath("/api/concepts?projectId=56403")
          given().spec(requestSpec).get(RestAssured.basePath)
                 .then().contentType(ContentType.JSON).extract().response()
