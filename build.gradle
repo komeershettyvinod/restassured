@@ -39,7 +39,6 @@ reports{
     //If you want to force gradle to always run fresh tests
     outputs.upToDateWhen { false }
     html.destination =  reporting.file("$name/tests")
-    println reporting.file("$name/tests")
     junitXml.destination = file("$buildDir/test-results/$name")
 }
 
@@ -48,6 +47,7 @@ reports{
     delete "$buildDir/tmp"
     delete "$buildDir/test-results"
     delete "$buildDir//resources"
+    delete "$buildDir//reports"
 
     useTestNG() {
         outputDirectory = file("$buildDir//TestNgReports")
