@@ -10,7 +10,7 @@ repositories {
 dependencies {
 
     compile "org.codehaus.groovy:groovy-all:2.3.9"
-    testCompile 'org.testng:testng:6.9.10'
+//    testCompile "org.testng:testng:6.9.10"
     testCompile 'com.jayway.restassured:rest-assured:2.8.0'
 
     compile "org.uncommons:reportng:1.1.4"
@@ -19,8 +19,23 @@ dependencies {
 }
 
 task testSuite (type: Test, dependsOn: [classes,testClasses]) {
+    Properties properties = new Properties();
+    def fis=new FileInputStream(System.getProperty("user.dir")+"/src/test/resources/".replace('/',File.separator)+"build.properties")
+    properties.load(fis)
+    properties.each { key, value ->
+        println "Key-->"+ key
+        println "Value-->"+value
+        if (System.getProperty(key)==null) {
+            systemProperty key, value
+        }
+        else{
+            systemProperty key, System.getProperty(key)
+        }
+        println "Key1-->"+ key
+        println "Value1-->"+value
+    }
 
-    println("IN DRIVER.EACH")
+
     delete "$buildDir/tmp"
     delete "$buildDir/test-results"
     delete "$project.buildDir//target"
