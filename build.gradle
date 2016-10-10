@@ -7,7 +7,7 @@ repositories {
 dependencies {
 
     compile "org.codehaus.groovy:groovy-all:2.3.9"
-//    testCompile "org.testng:testng:6.9.10"
+    testCompile "org.testng:testng:6.9.10"
     testCompile 'com.jayway.restassured:rest-assured:2.8.0'
 
     compile "org.uncommons:reportng:1.1.4"
@@ -15,7 +15,7 @@ dependencies {
     compile "com.google.inject:guice:4.0"
 }
 
-task testSuite (type: Test, dependsOn: [classes,testClasses]) {
+task testSuite(type: Test, dependsOn: [classes,testClasses]) {
     Properties properties = new Properties();
     def fis=new FileInputStream(System.getProperty("user.dir")+"/src/test/resources/".replace('/',File.separator)+"build.properties")
     properties.load(fis)
@@ -31,26 +31,32 @@ task testSuite (type: Test, dependsOn: [classes,testClasses]) {
         println "Key1-->"+ key
         println "Value1-->"+value
     }
+reports{
+    //gradle test command executes the test only one time per change.
+    // So if you are running it the second time there will be no output on test results.
+    // You can also see this in the building output: gradle then says UP-TO-DATE on tests.
+    // So its not executed a n-th time.
+    //If you want to force gradle to always run fresh tests
+    outputs.upToDateWhen { false }
+    html.destination =  reporting.file("$name/tests")
+    println reporting.file("$name/tests")
+    junitXml.destination = file("$buildDir/test-results/$name")
+}
 
+    test.testLogging.showStandardStreams = true
 
     delete "$buildDir/tmp"
     delete "$buildDir/test-results"
-    delete "$project.buildDir//target"
-    outputs.upToDateWhen { false }
-    reports.html.destination = "$buildDir/reports/"
-    reports.junitXml.destination = "$buildDir/test-results/"
-    test.testLogging.showStandardStreams = true
-    systemProperty "test.logger.configured", "false"
-    reports.html.enabled = false
+    delete "$buildDir//resources"
 
     useTestNG() {
+        outputDirectory = file("$buildDir//TestNgReports")
+        useDefaultListeners = true
 
-        outputDirectory = file("$project.buildDir//target")
-        useDefaultListeners = false
-        options {
-            listeners << 'org.uncommons.reportng.HTMLReporter'
-            listeners << 'org.uncommons.reportng.JUnitXMLReporter'
-        }
+//        options {
+//            listeners << 'org.uncommons.reportng.HTMLReporter'
+//            listeners << 'org.uncommons.reportng.JUnitXMLReporter'
+//        }
         suites 'src/test/resources/test.xml'
     }
 
