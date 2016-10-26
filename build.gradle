@@ -5,14 +5,15 @@ repositories {
 }
 
 dependencies {
-
-    compile "org.codehaus.groovy:groovy-all:2.3.9"
-    testCompile "org.testng:testng:6.9.10"
+    testCompile "org.testng:testng:6.9.9"
     testCompile 'com.jayway.restassured:rest-assured:2.8.0'
+    compile "net.sf.opencsv:opencsv:2.3"
 
-    compile "org.uncommons:reportng:1.1.4"
-    compile "velocity:velocity:1.4"
-    compile "com.google.inject:guice:4.0"
+//    compile "org.uncommons:reportng:1.1.4"
+//    compile "velocity:velocity:1.4"
+//    compile "com.google.inject:guice:4.0"
+//    compile group: 'org.testng', name: 'testng', version: '6.9.10'
+//    compile "org.codehaus.groovy:groovy-all:2.4.5"
 }
 
 task testSuite(type: Test, dependsOn: [classes,testClasses]) {
