@@ -1,6 +1,7 @@
-package TestMethods
+package testscripts
 
 import Utils.RestHelper
+import au.com.bytecode.opencsv.CSVReader
 
 /**
  * Created by vinodk on 04-09-2016.
@@ -12,27 +13,31 @@ import com.jayway.restassured.path.json.JsonPath
 import com.jayway.restassured.specification.RequestSpecification
 import org.testng.Reporter
 import org.testng.annotations.BeforeClass
+import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
 import com.jayway.restassured.response.Response
-import static com.jayway.restassured.RestAssured.given;
-import com.jayway.restassured.RestAssured.*
-import com.jayway.restassured.matcher.RestAssuredMatchers.*
-import org.hamcrest.Matchers.*
-import static com.jayway.restassured.RestAssured.baseURI
-import com.jayway.restassured.RestAssured;
-import static com.jayway.restassured.RestAssured.*;
-import static com.jayway.restassured.authentication.FormAuthConfig.springSecurity;
-import static org.hamcrest.Matchers.equalTo;
+import static com.jayway.restassured.RestAssured.given
+
+import com.jayway.restassured.RestAssured
+
 class Get extends RestHelper{
 
-    String jsonAsString,finalCookie;
+    String jsonAsString,finalCookie,rootDir,relativePath,filePath;
     Response response;
     public  RequestSpecBuilder builder;
     int m;
     public  RequestSpecification requestSpec;
+    CSVReader reader;
 
     @BeforeClass
     public setup() {
+
+        rootDir = new File(".").getCanonicalPath()
+        relativePath="/src/test/resources/TestFiles/".replace("/",File.separator)
+        filePath=rootDir+relativePath
+        reader = new CSVReader(new FileReader(System.getProperty("csvFilePath").replace("/",File.separator)));
+
+
         response=given().header("Content-Type", "application/x-www-form-urlencoded").formParam("j_username", "Vinod.komeershetty.consultant@nielsen.com").formParam("j_password", "Affinnova").request().post();
         finalCookie=response.getHeader("Set-Cookie").split(";")[0]
         Reporter.log("Base Path----->"+RestAssured.basePath)
@@ -46,7 +51,7 @@ class Get extends RestHelper{
         Reporter.log("Base URL-->"+RestAssured.baseURI)
     }
 
-    @Test
+    @Test(enabled = false)
     public void testApp(){
 
         Reporter.log("At Test")
@@ -57,25 +62,57 @@ class Get extends RestHelper{
 //        Assert.assertTrue(jp.concepts.conceptImages[0],"apshot")
     }
 
-    @Test
+    @Test(enabled = false)
     public void get2() {
-
-
-
         setBasePath("/api/concepts?projectId=56403")
          given().spec(requestSpec).get(RestAssured.basePath)
                 .then().contentType(ContentType.JSON).extract().response()
     }
+
+    @Test(dataProvider = "fileTypes")
+    public void  fileTypes(String filename,String path,String da){
+//       setBasePath("/documentstore/v1/file/upload")
+        Response res= given().contentType("multipart/form-data").with().multiPart(filename, new File("D://sampleFile.txt")).when().post(RestAssured.baseURI).then().extract().response()
+        JsonPath js= getJsonPath(res)
+//        println res.statusCode()
+        println(filename+"   and my path  is "+"" +path+"dd"+da)
+//        println  "json file" + js
+    }
+
+
+    @DataProvider(name = "fileTypes")
+    public String[][] createMD5TestData() {
+
+//        reader.
+//        String[][] salutation=new String[3][3];
+//        salutation[0][0]="fileName1"
+//        salutation[0][1]="FilePath1"
+//        salutation[0][2]="Fileda1"
 //
+//        salutation[1][0]="fileName2"
+//        salutation[1][1]="filePath2"
+//        salutation[1][2]="Fileda2"
+//
+//        salutation[2][0]="FileName3"
+//        salutation[2][1]="FilePath3"
+//        salutation[2][2]="Fileda3"
+
+
+//        return salutation
+        }
+
+
+
+
 //    @Test
-//    public void m2(){
+//    public void m2(){.
 //        print "sds"
 //        expect().body("concepts.s[1].project",equalTo("/platformservices/api/concepts/109833/project"))
 //                .given()
 //                .header("Cookie",finalCookie)
 //                .get("http://dweb5s4.dev.affinnova.com/platformservices/api/concepts?projectId=56403")
 //    }
-//
+
 //    @Test
 //    public void m3(){
 //        expect().body("concepts.links[1].project",equalTo("/platformservices/api/concepts/109833/project"))
@@ -84,7 +121,7 @@ class Get extends RestHelper{
 //                .get("http://dweb5s4.dev.affinnova.com/platformservices/api/concepts?projectId=56403")
 ////                .asString()
 //    }
-//
+
 //    @Test
 //    public void  m4(){
 //        Response res1= given().header("Cookie",finalCookie).when().get("http://dweb5s4.dev.affinnova.com/platformservices/api/concepts?projectId=56403")

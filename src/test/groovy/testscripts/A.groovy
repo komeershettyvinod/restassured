@@ -1,4 +1,4 @@
-package TestMethods
+package testscripts
 
 import com.jayway.restassured.builder.RequestSpecBuilder
 import com.jayway.restassured.response.Response
@@ -7,10 +7,7 @@ import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 import static com.jayway.restassured.RestAssured.baseURI
-import static com.jayway.restassured.RestAssured.baseURI
 import static com.jayway.restassured.RestAssured.given
-import static com.jayway.restassured.RestAssured.given
-import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.equalTo
 
 /**
@@ -26,7 +23,7 @@ class A {
     public void m3() {
 //        authentication=preemptive().basic("Vinod.Komeershetty.cons","jetfty");
 //        print "uff"
-//        TestMethods.auth(baseURI);
+//        testscripts.auth(baseURI);
 
         RequestSpecBuilder rbuild = new RequestSpecBuilder();
         rbuild.setContentType("application/x-www-form-urlencoded")
