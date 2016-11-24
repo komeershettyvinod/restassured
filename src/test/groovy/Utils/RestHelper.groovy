@@ -8,6 +8,7 @@ import org.testng.annotations.AfterSuite
 import org.testng.annotations.BeforeSuite
 
 import static com.jayway.restassured.RestAssured.basePath
+import static com.jayway.restassured.RestAssured.baseURI
 
 /**
  * Created by vinodk on 23-09-2016.
@@ -16,7 +17,7 @@ public class RestHelper {
 
    //Global Setup Variables
     public static String path; //Rest request path
-//    public ConfigHelper cfg;
+    public ConfigHelper cfg;
 
     /*
     ***Sets Base URI***
@@ -24,11 +25,13 @@ public class RestHelper {
     */
     @BeforeSuite
     public  void setBaseURI (){
-//        cfg=new ConfigHelper("build.properties");
+        cfg=new ConfigHelper("build.properties");
 //        RestAssured.baseURI = cfg.getProperty("baseUrl");
 //        RestAssured.basePath = cfg.getProperty("basePath");
+//        print baseUrl;
         RestAssured.baseURI = System.getProperty("baseUrl");
         RestAssured.basePath = System.getProperty("basePath");
+        println("ddd"+baseURI)
     }
 
     /*

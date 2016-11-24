@@ -18,12 +18,17 @@ public class ConfigHelper
     String fileName;
     public static Properties properties;
 
-    ConfigHelper(String fileName){
+    public  ConfigHelper(String fileName){
         properties = new Properties();
         try {
             this.fileName=fileName;
             FileInputStream fis = new FileInputStream(gettestResourcesFileFolderPath()+fileName);
             properties.load(fis);
+            properties.each{key,value ->
+                if(System.getProperty(key)==null){
+                    System.setProperty(key,value)
+                }
+            }
             fis.close();
         }
         catch (IOException e) {

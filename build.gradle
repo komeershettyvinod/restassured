@@ -51,6 +51,7 @@ reports{
     delete "$buildDir//reports"
 
     useTestNG() {
+        test.testLogging.showStandardStreams = true
         outputDirectory = file("$buildDir//TestNgReports")
         useDefaultListeners = true
 
