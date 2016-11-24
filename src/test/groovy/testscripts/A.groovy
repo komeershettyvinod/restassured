@@ -27,8 +27,8 @@ class A {
 
         RequestSpecBuilder rbuild = new RequestSpecBuilder();
         rbuild.setContentType("application/x-www-form-urlencoded")
-        rbuild.addParameter("j_username","Vinod.Komeershetty.consultant@nielsen.com")
-        rbuild.addParameter("j_password","Affinnova")
+        rbuild.addParameter("j_username","secret")
+        rbuild.addParameter("j_password","secret")
         RequestSpecification rSpec = rbuild.build();
         Response resp = given().spec(rSpec).when().post(baseURI).then().statusCode(200);
 

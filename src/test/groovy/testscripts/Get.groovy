@@ -16,6 +16,8 @@ import org.testng.annotations.BeforeClass
 import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
 import com.jayway.restassured.response.Response
+
+import static com.jayway.restassured.RestAssured.baseURI
 import static com.jayway.restassured.RestAssured.given
 
 import com.jayway.restassured.RestAssured
@@ -35,10 +37,10 @@ class Get extends RestHelper{
         rootDir = new File(".").getCanonicalPath()
         relativePath="/src/test/resources/TestFiles/".replace("/",File.separator)
         filePath=rootDir+relativePath
-        reader = new CSVReader(new FileReader(System.getProperty("csvFilePath").replace("/",File.separator)));
+//        reader = new CSVReader(new FileReader(System.getProperty("csvFilePath").replace("/",File.separator)));
 
 
-        response=given().header("Content-Type", "application/x-www-form-urlencoded").formParam("j_username", "Vinod.komeershetty.consultant@nielsen.com").formParam("j_password", "Affinnova").request().post();
+        response=given().header("Content-Type", "application/x-www-form-urlencoded").formParam("j_username", "secret").formParam("j_password", "secret").request().post();
         finalCookie=response.getHeader("Set-Cookie").split(";")[0]
         Reporter.log("Base Path----->"+RestAssured.basePath)
         setBasePath("")
@@ -51,55 +53,61 @@ class Get extends RestHelper{
         Reporter.log("Base URL-->"+RestAssured.baseURI)
     }
 
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void testApp(){
+
+        print baseURI
+        print"dddss"
+        + baseURI
 
         Reporter.log("At Test")
         setBasePath("/api/concepts?projectId=56403")
         Response res= given().spec(requestSpec).when().get(RestAssured.basePath)
                 .then().contentType(ContentType.JSON).extract().response()
         JsonPath jp=getJsonPath(res)
+        println jp
 //        Assert.assertTrue(jp.concepts.conceptImages[0],"apshot")
     }
 
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void get2() {
+        println jp
         setBasePath("/api/concepts?projectId=56403")
          given().spec(requestSpec).get(RestAssured.basePath)
                 .then().contentType(ContentType.JSON).extract().response()
     }
 
-    @Test(dataProvider = "fileTypes")
-    public void  fileTypes(String filename,String path,String da){
-//       setBasePath("/documentstore/v1/file/upload")
-        Response res= given().contentType("multipart/form-data").with().multiPart(filename, new File("D://sampleFile.txt")).when().post(RestAssured.baseURI).then().extract().response()
-        JsonPath js= getJsonPath(res)
-//        println res.statusCode()
-        println(filename+"   and my path  is "+"" +path+"dd"+da)
-//        println  "json file" + js
-    }
+//    @Test(dataProvider = "fileTypes")
+//    public void  fileTypes(String filename,String path,String da){
+////       setBasePath("/documentstore/v1/file/upload")
+//        Response res= given().contentType("multipart/form-data").with().multiPart(filename, new File("D://sampleFile.txt")).when().post(RestAssured.baseURI).then().extract().response()
+//        JsonPath js= getJsonPath(res)
+////        println res.statusCode()
+//        println(filename+"   and my path  is "+"" +path+"dd"+da)
+////        println  "json file" + js
+//    }
 
 
-    @DataProvider(name = "fileTypes")
-    public String[][] createMD5TestData() {
-
-//        reader.
-//        String[][] salutation=new String[3][3];
-//        salutation[0][0]="fileName1"
-//        salutation[0][1]="FilePath1"
-//        salutation[0][2]="Fileda1"
+//    @DataProvider(name = "fileTypes")
+//    public String[][] createMD5TestData() {
 //
-//        salutation[1][0]="fileName2"
-//        salutation[1][1]="filePath2"
-//        salutation[1][2]="Fileda2"
+////        reader.
+////        String[][] salutation=new String[3][3];
+////        salutation[0][0]="fileName1"
+////        salutation[0][1]="FilePath1"
+////        salutation[0][2]="Fileda1"
+////
+////        salutation[1][0]="fileName2"
+////        salutation[1][1]="filePath2"
+////        salutation[1][2]="Fileda2"
+////
+////        salutation[2][0]="FileName3"
+////        salutation[2][1]="FilePath3"
+////        salutation[2][2]="Fileda3"
 //
-//        salutation[2][0]="FileName3"
-//        salutation[2][1]="FilePath3"
-//        salutation[2][2]="Fileda3"
-
-
-//        return salutation
-        }
+//
+////        return salutation
+//        }
 
 
 
